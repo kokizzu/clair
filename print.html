@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Clair Documentation</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
         
         <meta name="description" content="Documentation for Clair.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -32,7 +32,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -62,24 +62,29 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -117,9 +122,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -384,7 +389,7 @@ notifier:
 This environment can be used to test and develop Clair's Quay integration.</p>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <h3 id="make"><a class="header" href="#make">Make</a></h3>
-<p>Make is used to stand up the the local dev environment.
+<p>Make is used to stand up the local dev environment.
 Make is readily available in just about every package manager you can think of.
 It's very likely your workstation already has make on it.</p>
 <h3 id="podmandocker-and-docker-compose"><a class="header" href="#podmandocker-and-docker-compose">Podman/Docker and Docker Compose</a></h3>
@@ -512,7 +517,7 @@ Further information and usage is an effort left to the reader.</p>
 This is used by the notifier to determine the added and removed vulnerabilities on security databsae update.</p>
 <h2 id="update-operation"><a class="header" href="#update-operation">Update Operation</a></h2>
 <p>The <code>update_operation</code> endpoint exposes the api for viewing updaters' activity. 
-This is used by the notifier to determine if new updates have occured and triggers an update diff to see what has changed.</p>
+This is used by the notifier to determine if new updates have occurred and triggers an update diff to see what has changed.</p>
 <h2 id="affectedmanifest"><a class="header" href="#affectedmanifest">AffectedManifest</a></h2>
 <p>The <code>affected_manifest</code> endpoint exposes the api for retreiving affected manifests given a list of Vulnerabilities.
 This is used by the notifier to determine the manifests that need to have a notification generated.</p>
@@ -536,17 +541,17 @@ encoded symmetric key for validating the requests.</p>
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="notifications-1"><a class="header" href="#notifications-1">Notifications</a></h1>
 <p>ClairV4 implements a notification system.</p>
-<p>The notifier service will keep track of new security database updates and inform an interested client if new or removed vulnerabilites affect an indexed manifest.</p>
+<p>The notifier service will keep track of new security database updates and inform an interested client if new or removed vulnerabilities affect an indexed manifest.</p>
 <p>The interested client can subscribe to notifications via several mechanisms:</p>
 <ul>
 <li>Webhook delivery</li>
 <li>AMQP delivery</li>
 <li>STOMP delivery</li>
 </ul>
-<p>Configuring the notifier is done via the yaml configuration. </p>
+<p>Configuring the notifier is done via the yaml configuration.</p>
 <p>See the &quot;Notifier&quot; object in our <a href="concepts/../reference/config.html">config reference</a></p>
 <h2 id="a-notification"><a class="header" href="#a-notification">A Notification</a></h2>
-<p>When the notifier becomes aware of new vulnerabilities affecting a previously indexed manifest, it will use the configured method(s) to issue notifications about the new changes. Any given notification expresses the <strong>most severe</strong> vulnerability discovered because of the change. This avoids creating a flurry of notifications for the same security database update. </p>
+<p>When the notifier becomes aware of new vulnerabilities affecting a previously indexed manifest, it will use the configured method(s) to issue notifications about the new changes. Any given notification expresses the <strong>most severe</strong> vulnerability discovered because of the change. This avoids creating a flurry of notifications for the same security database update.</p>
 <p>Once a client receives a notification, it should issue a new request against the <a href="concepts/../reference/matcher.html">matcher</a> to receive an up-to-date vulnerability report.</p>
 <p>The notification schema is the JSON marshaled form of the following types:</p>
 <pre><code class="language-go">// Reason indicates the catalyst for a notification
@@ -580,13 +585,13 @@ type VulnSummary struct {
 <li>A target URL where the webhook will fire</li>
 <li>The callback URL where the notifier may be reached including its API path
 <ul>
-<li>e.g. &quot;http://clair-notifier/notifier/api/v1/notifications&quot;</li>
+<li>e.g. &quot;http://clair-notifier/notifier/api/v1/notification&quot;</li>
 </ul>
 </li>
 </ul>
 <p>When the notifier has determined an updated security database has changed the affected status of an indexed manifest, it will deliver the following JSON body to the configured target:</p>
 <pre><code class="language-json">{
-  &quot;notifiction_id&quot;: {uuid_string},
+  &quot;notification_id&quot;: {uuid_string},
   &quot;callback&quot;: {url_to_notifications}
 }
 </code></pre>
@@ -597,14 +602,14 @@ type VulnSummary struct {
 <pre><code class="language-go">GET /notifier/api/v1/notification/{id}?[page_size=N][next=N]
 {
   page: {
-    size:    int,      // maximum number of notifications in the response 
+    size:    int,      // maximum number of notifications in the response
     next:   string, //  if present, the next id to fetch.
   }
   notifications: [ Notification… ] // array of notifications; max len == page.size
 }
 </code></pre>
 <p>The GET callback request implements a simple bare-minimum paging mechanism.</p>
-<p>The &quot;page_size&quot; url param controls how many notifications are returned in a single page. 
+<p>The &quot;page_size&quot; url param controls how many notifications are returned in a single page.
 If not provided a default of 500 is used.</p>
 <p>The &quot;next&quot; url param informs Clair the next set of paged notifications to return. If not provided the 0th page is assumed.</p>
 <p>A page object accompanying the notification list specifies &quot;next&quot; and &quot;size&quot; fields.</p>
@@ -612,10 +617,10 @@ If not provided a default of 500 is used.</p>
 <p>The &quot;size&quot; field will simply echo back the request page_size parameter.</p>
 <p>When the final page is served to the client the returned &quot;page&quot; data structure will not contain a &quot;next&quot; member.</p>
 <p>Therefore the following loop is valid for obtaining all notifications for a notification id in pages of a specified size.</p>
-<pre><code>{ page, notifications } = http.Get(&quot;http://clairv4/notifier/api/v1/notifications/{id}?page_size=1000&quot;)
+<pre><code>{ page, notifications } = http.Get(&quot;http://clairv4/notifier/api/v1/notification/{id}?page_size=1000&quot;)
 
 while (page.Next != None) {
-    { page, notifications } = http.Get(&quot;http://clairv4/notifier/api/v1/notifications/{id}?next={page.Next},page_size=1000&quot;)
+    { page, notifications } = http.Get(&quot;http://clairv4/notifier/api/v1/notification/{id}?next={page.Next},page_size=1000&quot;)
 }
 </code></pre>
 <p><em>Note: If the client specifies a custom page_size it must specify this page_size on every request for accurate responses.</em></p>
@@ -1852,7 +1857,7 @@ This operation does not require authentication
 <a id="tocscallback"></a>
 <pre><code class="language-json">{
   &quot;notification_id&quot;: &quot;269886f3-0146-4f08-9bf7-cb1138d48643&quot;,
-  &quot;callback&quot;: &quot;http://clair-notifier/notifier/api/v1/notifications/269886f3-0146-4f08-9bf7-cb1138d48643&quot;
+  &quot;callback&quot;: &quot;http://clair-notifier/notifier/api/v1/notification/269886f3-0146-4f08-9bf7-cb1138d48643&quot;
 }
 
 </code></pre>
