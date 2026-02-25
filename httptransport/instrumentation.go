@@ -92,15 +92,14 @@ func (m *wrapper) init(name string) {
 }
 
 func (m *wrapper) wrap(tag string, h http.Handler) http.Handler {
-	// Add the route tag for traces
-	return otelhttp.WithRouteTag(tag,
-		// Stack all these metrics handlers.
-		promhttp.InstrumentHandlerCounter(m.RequestCount.MustCurryWith(prometheus.Labels{"handler": tag}),
-			promhttp.InstrumentHandlerRequestSize(m.RequestSize.MustCurryWith(prometheus.Labels{"handler": tag}),
-				promhttp.InstrumentHandlerResponseSize(m.ResponseSize.MustCurryWith(prometheus.Labels{"handler": tag}),
-					promhttp.InstrumentHandlerDuration(m.RequestDuration.MustCurryWith(prometheus.Labels{"handler": tag}),
-						promhttp.InstrumentHandlerInFlight(m.InFlight.WithLabelValues(tag),
-							catchAbort(h)))))))
+	// Stack all these metrics handlers.
+	h = promhttp.InstrumentHandlerCounter(m.RequestCount.MustCurryWith(prometheus.Labels{"handler": tag}),
+		promhttp.InstrumentHandlerRequestSize(m.RequestSize.MustCurryWith(prometheus.Labels{"handler": tag}),
+			promhttp.InstrumentHandlerResponseSize(m.ResponseSize.MustCurryWith(prometheus.Labels{"handler": tag}),
+				promhttp.InstrumentHandlerDuration(m.RequestDuration.MustCurryWith(prometheus.Labels{"handler": tag}),
+					promhttp.InstrumentHandlerInFlight(m.InFlight.WithLabelValues(tag),
+						catchAbort(h))))))
+	return otelhttp.NewHandler(h, tag)
 }
 
 func (m *wrapper) wrapFunc(tag string, h http.HandlerFunc) http.Handler {
