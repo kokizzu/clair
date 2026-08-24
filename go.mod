@@ -16,13 +16,13 @@ require (
 	github.com/prometheus/client_golang v1.24.1
 	github.com/quay/clair/config v1.4.3
 	github.com/quay/claircore v1.5.52
-	github.com/quay/claircore/toolkit v1.6.0
+	github.com/quay/claircore/toolkit v1.6.1
 	github.com/quay/zlog/v2 v2.1.1
 	github.com/rabbitmq/amqp091-go v1.13.0
 	github.com/remind101/migrate v0.0.0-20170729031349-52c1edff7319
 	github.com/rogpeppe/go-internal v1.15.0
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
-	github.com/ugorji/go/codec v1.2.14
+	github.com/ugorji/go/codec v1.3.2
 	github.com/urfave/cli/v2 v2.27.7
 	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.69.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0
@@ -71,7 +71,7 @@ require (
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
-	github.com/package-url/packageurl-go v0.1.5 // indirect
+	github.com/package-url/packageurl-go v0.1.6 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/otlptranslator v1.0.0 // indirect
